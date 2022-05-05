@@ -2,6 +2,7 @@
 let seconds = 00;
 let milliseconds = 00;
 let minutes = 00;
+let hours = 00;
 
 // -- Access and store dom elements as variables --
 const outputSeconds = document.getElementById("second");
@@ -10,16 +11,15 @@ const buttonStart = document.getElementById("btn-start");
 const buttonStop = document.getElementById("btn-stop");
 const buttonReset = document.getElementById("btn-reset");
 const buttonLap = document.getElementById("btn-lap");
+const outputMins = document.getElementById("minutes");
+const outputHours = document.getElementById("hours");
 
 // -- container for interval value --
 let Interval;
 
 //Container for minute values. Create span for later appending
-const colon = document.getElementById("minSep");
-
-// --Create new elements/textNodes and store in variables--
-const minuteElement = document.createElement("Span");
-const minutesStart = document.createTextNode(minutes);
+const minColon = document.getElementById("minSep");
+const hoursColon = document.getElementById("hourSep");
 
 //Create list items
 
@@ -28,7 +28,7 @@ const minutesStart = document.createTextNode(minutes);
 const listItem = () => {
     const lapElement = document.createElement("LI");
     //store lap time as string in variable
-    const lapTime = `${minutes}:${seconds}:${milliseconds}`;
+    const lapTime = `${outputMins.innerHTML}:${outputSeconds.innerHTML}:${outputMilliseconds.innerHTML}`;
     //create a text node containing lapTime
     const lap = document.createTextNode(lapTime);
     //append the text node to the LI created in lapElement variable
@@ -37,7 +37,6 @@ const listItem = () => {
     //use DOM to append lap time to the html
     document.getElementById("laps").appendChild(lapElement);
 };
-
 
 // -- BUTTON EVENT LISTENERS --
 buttonStart.addEventListener("click", () => {
@@ -59,33 +58,31 @@ buttonReset.addEventListener("click", () => {
     //sets values to 00
     milliseconds = "00";
     seconds = "00";
+    minutes = "00";
 
     //Uses the DOM to set the below elements to the above values
+    outputMins.innerHTML = minutes;
     outputMilliseconds.innerHTML = milliseconds;
     outputSeconds.innerHTML = seconds;
 
-    const minsVal = document.getElementById("minutes")
-    //Remove minutes values from DOM if minutes have been displayed -!!NOT FUNCTIONING CURRENTLY!!-
-    if(document.getElementById("clock").contains(minsVal)) {
-        minsVal.remove();
-    }
+    outputMins.style.display = "none";
+    colon.style.display = "none";
 });
 
 buttonLap.addEventListener("click",() => {
-    //NOW STORED IN LISTITEM VARIABLE
-    /*const lapTime = `${minutes}:${seconds}:${milliseconds}`;
-    const lap = document.createTextNode(lapTime);
-    lapElement.appendChild(lap);
-
-    document.getElementById("laps").appendChild(lapElement);*/
     listItem();
-})
+});
+
+//Incriment Minutes
+const minuteIncriment = () => {
+    minutes = minutes + 1;
+}
 
 const startTime = () => {
     //Interval milliseconds
     milliseconds++;
     //checks if millisecond interval is less than 9, if so apply the value to the innerHTML
-    if (milliseconds <= 9) {
+    if (milliseconds <= 9 && milliseconds > 0) {
         outputMilliseconds.innerHTML = "0" + milliseconds;
     };
 
@@ -101,31 +98,33 @@ const startTime = () => {
         outputMilliseconds.innerHTML = "0" + milliseconds;
     };
 
-    if (seconds > 9) {
+    if (seconds >= 10) {
         outputSeconds.innerHTML = seconds;
     };
 
-            //!!!REQUIRES FURTHER FUNCTIONALITY IN ORDER TO DISPLAY CURRENT MINUTE AND RESET SECONDS TO 00 AFTER 59/60 SECONDS!!!
-    //!Set at 10 seconds for testing purpose
-    if (seconds == 10) {
-        //Sets id for new minute element
-        minuteElement.id = "minute";
-        //append starting value to new minute element
-        minuteElement.appendChild(minutesStart);
-
-        //increment minute (currently not workin gand stopping minutes appearing)
-        /*minutes ++;
-        seconds = 00;
-        outputSeconds = seconds;*/
-
-        //insert minute element at the start of clock element 9before seconds and milliseconds
-        document.getElementById("clock").insertBefore(minuteElement, clock.children[0]);
-        //set the new minute element within the dom to equal the current minutes value
-        document.getElementById("minute").innerHTML = minutes;
-        //displays colon minute seperator
-        if(colon.style.display === "none"){
-            colon.style.display = "inline-flex"
-        };
+    if (seconds < 10 && seconds > 0) {
+        outputSeconds.innerHTML = "0" + seconds;
     };
+
+    //checks if seconds value is equal to 60, if so apply to innerHTML
+    if (seconds === 60) {
+        //increment minute
+        minutes ++;
+        outputMins.innerHTML = minutes;
+
+        outputMins.style.display = "inline-flex";
+        minColon.style.display = "inline-flex";
+        
+        seconds = 00;
+        outputSeconds.innerHTML = seconds; 
+        
+        milliseconds = 00;
+        outputMilliseconds.innerHTML = milliseconds;
+    };
+
+    /*if (minutes < 10 & minutes > 0) {
+        outputMins.innerHTML = "0" + minutes;
+    }*/
 };
+
 

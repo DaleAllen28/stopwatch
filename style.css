@@ -55,5 +55,11 @@ h1 {
 /*REQUIRES FURTHER STYLING TO ALIGN LIST CENTRALLY*/
 .container section ol{
     list-style-position: inside;
-    padding:auto;
+    padding:0;
+    width: 100%;
+}
+
+.container section ol li {
+    margin:0%;
+    padding: auto;
 }
