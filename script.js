@@ -2,7 +2,6 @@
 let seconds = 00;
 let milliseconds = 00;
 let minutes = 00;
-let hours = 00;
 
 // -- Access and store dom elements as variables --
 const outputSeconds = document.getElementById("second");
@@ -13,6 +12,7 @@ const buttonReset = document.getElementById("btn-reset");
 const buttonLap = document.getElementById("btn-lap");
 const outputMins = document.getElementById("minutes");
 const outputHours = document.getElementById("hours");
+const lapList = document.querySelector("#laps");
 
 // -- container for interval value --
 let Interval;
@@ -21,11 +21,32 @@ let Interval;
 const minColon = document.getElementById("minSep");
 const hoursColon = document.getElementById("hourSep");
 
-//Create list items
+//Remove All Child Nodes function
+const removeAllChildNodes = (parent) => {
+    while(parent.firstChild) {
+        parent.removeChild(parent.firstChild)
+    }
+};
 
-
-        //!!!REQUIRES FURTHER ACTION TO DISPLAY LAPS IN COLUMN ORDERED LIST (AS OPPOSED TO INLINE FIRST LI)!!!
+// -- LAP FUNCTION --
 const listItem = () => {
+    //Create header element
+    const lapHeadEl = document.createElement("h2");
+    //Add id to lap header
+    lapHeadEl.setAttribute("id", "lapHeader");
+    //Text node with lap header content
+    const lapHeader = document. createTextNode("Laps");
+    //Append header content to lapHead element
+    lapHeadEl.appendChild(lapHeader);
+    //Selector to access lapHead element with DOM
+    const lapHeadSelector = document.getElementById("lapHeader");
+
+    //Check if lap header exists. If it doesn't, append Header to lap list
+    if (!lapHeadSelector) {
+        document.querySelector("#laps").appendChild(lapHeadEl);
+    }
+
+    //Create list element
     const lapElement = document.createElement("LI");
     //store lap time as string in variable
     const lapTime = `${outputMins.innerHTML}:${outputSeconds.innerHTML}:${outputMilliseconds.innerHTML}`;
@@ -38,6 +59,11 @@ const listItem = () => {
     document.getElementById("laps").appendChild(lapElement);
 };
 
+// -- LAP EVENT LISTENER
+buttonLap.addEventListener("click",() => {
+    listItem();
+});
+
 // -- BUTTON EVENT LISTENERS --
 buttonStart.addEventListener("click", () => {
     //Stop a running timer
@@ -46,7 +72,7 @@ buttonStart.addEventListener("click", () => {
     Interval = setInterval(startTime, 10);
 });
 
-
+// -- STOP BUTTON --
 buttonStop.addEventListener("click",() => {
     clearInterval(Interval);
 });
@@ -66,17 +92,11 @@ buttonReset.addEventListener("click", () => {
     outputSeconds.innerHTML = seconds;
 
     outputMins.style.display = "none";
-    colon.style.display = "none";
-});
+    minColon.style.display = "none";
 
-buttonLap.addEventListener("click",() => {
-    listItem();
-});
+    removeAllChildNodes(lapList);
 
-//Incriment Minutes
-const minuteIncriment = () => {
-    minutes = minutes + 1;
-}
+});
 
 const startTime = () => {
     //Interval milliseconds
@@ -90,19 +110,20 @@ const startTime = () => {
     if (milliseconds > 9) {
         outputMilliseconds.innerHTML = milliseconds;
     };
-
+    //If milliseconds exceeds 99, incriment seconds and reset milliseconds value to 0
     if (milliseconds > 99) {
         seconds ++;
         outputSeconds.innerHTML = "0" + seconds;
         milliseconds = 0;
         outputMilliseconds.innerHTML = "0" + milliseconds;
     };
-
+    // apply current seconds from variable to inner html
     if (seconds >= 10) {
         outputSeconds.innerHTML = seconds;
     };
 
-    if (seconds < 10 && seconds > 0) {
+    // Add 0 to seconds to display double digits and apply to inner html
+    if (minutes > 0 && seconds < 10) {
         outputSeconds.innerHTML = "0" + seconds;
     };
 
@@ -121,10 +142,6 @@ const startTime = () => {
         milliseconds = 00;
         outputMilliseconds.innerHTML = milliseconds;
     };
-
-    /*if (minutes < 10 & minutes > 0) {
-        outputMins.innerHTML = "0" + minutes;
-    }*/
 };
 
 

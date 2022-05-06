@@ -12,11 +12,12 @@ body {
 }
 
 h1 {
-    font-size:3rem;
+    font-size:5rem;
 }
 
 #counter {
-    font-size: 2rem;
+    font-size: 4rem;
+    font-weight: 900;
 }
 
 #buttons {
@@ -59,7 +60,13 @@ h1 {
     width: 100%;
 }
 
+#lapHeader {
+    font-size: 2rem;
+}
+
+
 .container section ol li {
     margin:0%;
     padding: auto;
+    font-size: 1.5rem;
 }
